@@ -1,0 +1,6 @@
+@FPTTelecomBE_HostAddress = http://localhost:5150
+
+GET {{FPTTelecomBE_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
