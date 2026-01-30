@@ -1,5 +1,6 @@
 ﻿using FPTTelecomBE.Data;
 using FPTTelecomBE.Mappings;
+using FPTTelecomBE.Middleware;
 using FPTTelecomBE.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,12 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Logging configuration
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
+builder.Logging.AddEventSourceLogger();
 
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -39,7 +46,8 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = jwtSettings["Issuer"],
         ValidAudience = jwtSettings["Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(key)
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ClockSkew = TimeSpan.Zero // Remove default 5 minute tolerance
     };
 });
 
@@ -50,7 +58,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:3000", "http://localhost:5173") // React dev servers
+        policy.WithOrigins("http://localhost:3000", "http://localhost:5173", "http://localhost:5174") // React/Vite dev servers
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
@@ -65,7 +73,12 @@ builder.Services.AddSwaggerGen(c =>
     {
         Title = "FPT Telecom Bình Định API",
         Version = "v1",
-        Description = "API for FPT Telecom Bình Định website - Tư vấn & Lắp đặt WiFi"
+        Description = "API for FPT Telecom Bình Định website - Tư vấn & Lắp đặt WiFi",
+        Contact = new OpenApiContact
+        {
+            Name = "FPT Bình Định Support",
+            Email = "support@fptbinhdinh.com"
+        }
     });
 
     // JWT Bearer configuration in Swagger
@@ -100,7 +113,17 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "FPT Telecom Bình Định API v1");
+        c.RoutePrefix = string.Empty; // Swagger at root
+    });
+}
+else
+{
+    // Global exception handler for production
+    var logger = app.Services.GetRequiredService<ILogger<Program>>();
+    app.ConfigureExceptionHandler(logger);
 }
 
 app.UseHttpsRedirection();
@@ -111,5 +134,13 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// HealthIsDevelopment check endpoint
+app.MapGet("/health", () => Results.Ok(new
+{
+    status = "healthy",
+    timestamp = DateTime.UtcNow,
+    environment = app.Environment.EnvironmentName
+}));
 
 app.Run();

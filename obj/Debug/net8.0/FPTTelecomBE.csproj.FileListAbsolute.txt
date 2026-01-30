@@ -140,3 +140,4 @@ F:\FPTTelecomBD\BE\FPTTelecomBE\FPTTelecomBE\obj\Debug\net8.0\refint\FPTTelecomB
 F:\FPTTelecomBD\BE\FPTTelecomBE\FPTTelecomBE\obj\Debug\net8.0\FPTTelecomBE.pdb
 F:\FPTTelecomBD\BE\FPTTelecomBE\FPTTelecomBE\obj\Debug\net8.0\FPTTelecomBE.genruntimeconfig.cache
 F:\FPTTelecomBD\BE\FPTTelecomBE\FPTTelecomBE\obj\Debug\net8.0\ref\FPTTelecomBE.dll
+F:\FPTTelecomBD\BE\FPTTelecomBE\FPTTelecomBE\obj\Debug\net8.0\FPTTelecomBE.sourcelink.json

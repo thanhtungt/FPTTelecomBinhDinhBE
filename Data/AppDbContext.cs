@@ -50,6 +50,16 @@ public class AppDbContext : DbContext
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin@123"),
                 Role = "Admin",
                 CreatedAt = DateTime.UtcNow
+            },
+            new User
+            {
+                Id = 3,
+                Name = "Staff Quy Nhơn",
+                Email = "staff@fptbinhdinh.com",
+                Phone = "0902345678",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("Staff@123"),
+                Role = "Staff",
+                CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc)
             }
         );
 

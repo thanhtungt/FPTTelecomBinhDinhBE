@@ -3,6 +3,10 @@
   "info": {
     "title": "FPT Telecom Bình Định API",
     "description": "API for FPT Telecom Bình Định website - Tư vấn & Lắp đặt WiFi",
+    "contact": {
+      "name": "FPT Bình Định Support",
+      "email": "support@fptbinhdinh.com"
+    },
     "version": "v1"
   },
   "paths": {
@@ -61,6 +65,18 @@
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "tags": [
+          "FPTTelecomBE"
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -293,6 +309,15 @@
         "tags": [
           "Registrations"
         ],
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -397,10 +422,65 @@
           }
         }
       }
+    },
+    "/api/Registrations/{id}/assign": {
+      "put": {
+        "tags": [
+          "Registrations"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignStaffDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignStaffDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignStaffDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "AssignStaffDto": {
+        "required": [
+          "staffId"
+        ],
+        "type": "object",
+        "properties": {
+          "staffId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "CreatePostDto": {
         "required": [
           "category",
