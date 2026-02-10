@@ -16,6 +16,10 @@
 
         public string DeviceBonus { get; set; } = string.Empty; // "Modem WiFi 6 + 1 Mesh + FPT Play Box"
 
+        public string? ImageUrl { get; set; }
+
+        public int CategoryId { get; set; } // Foreign key
+        public Category? Category { get; set; } // Navigation property
         public bool Active { get; set; } = true;
     }
 }

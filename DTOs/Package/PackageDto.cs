@@ -9,5 +9,9 @@ public class PackageDto
     public decimal PriceMonthly { get; set; }
     public string PromotionText { get; set; } = string.Empty;
     public string DeviceBonus { get; set; } = string.Empty;
+    public string? ImageUrl { get; set; }
+    public int CategoryId { get; set; }
+    public string CategoryName { get; set; } = string.Empty;
+    public string CategorySlug { get; set; } = string.Empty;
     public bool Active { get; set; }
 }

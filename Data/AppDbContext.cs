@@ -9,6 +9,7 @@ public class AppDbContext : DbContext
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
     public DbSet<User> Users { get; set; }
+    public DbSet<Category> Categories { get; set; }
     public DbSet<Package> Packages { get; set; }
     public DbSet<Registration> Registrations { get; set; }
     public DbSet<Post> Posts { get; set; }
@@ -20,12 +21,19 @@ public class AppDbContext : DbContext
             .Property(p => p.PriceMonthly)
             .HasPrecision(18, 2);
 
-        // Relationships
+        // Category -> Package relationship
+        modelBuilder.Entity<Package>()
+            .HasOne(p => p.Category)
+            .WithMany(c => c.Packages)
+            .HasForeignKey(p => p.CategoryId)
+            .OnDelete(DeleteBehavior.Restrict); // Không cho xóa category nếu còn packages
+
+        // Registration relationships
         modelBuilder.Entity<Registration>()
             .HasOne(r => r.User)
             .WithMany()
             .HasForeignKey(r => r.UserId)
-            .OnDelete(DeleteBehavior.NoAction); // CHANGED: from SetNull to NoAction
+            .OnDelete(DeleteBehavior.NoAction);
 
         modelBuilder.Entity<Registration>()
             .HasOne(r => r.Package)
@@ -39,14 +47,21 @@ public class AppDbContext : DbContext
             .HasForeignKey(r => r.AssignedStaffId)
             .OnDelete(DeleteBehavior.SetNull);
 
-        // Seed admin user
+        // Seed data
+        SeedUsers(modelBuilder);
+        SeedCategories(modelBuilder);
+        SeedPackages(modelBuilder);
+    }
+
+    private static void SeedUsers(ModelBuilder modelBuilder)
+    {
         modelBuilder.Entity<User>().HasData(
             new User
             {
                 Id = 1,
                 Name = "Admin FPT Bình Định",
                 Email = "admin@fptbinhdinh.com",
-                Phone = "0901234567",
+                Phone = "0332766193",
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin@123"),
                 Role = "Admin",
                 CreatedAt = DateTime.UtcNow
@@ -62,8 +77,52 @@ public class AppDbContext : DbContext
                 CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc)
             }
         );
+    }
 
-        // Seed packages thực tế 01/2026 (dựa trên fpt.vn và Bình Định site)
+    private static void SeedCategories(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Category>().HasData(
+            new Category
+            {
+                Id = 1,
+                Name = "Internet Gia Đình",
+                Slug = "internet-gia-dinh",
+                DisplayOrder = 1,
+                Active = true,
+                CreatedAt = DateTime.UtcNow
+            },
+            new Category
+            {
+                Id = 2,
+                Name = "Combo Đa Dịch Vụ",
+                Slug = "combo-da-dich-vu",
+                DisplayOrder = 2,
+                Active = true,
+                CreatedAt = DateTime.UtcNow
+            },
+            new Category
+            {
+                Id = 3,
+                Name = "WiFi 7 Cao Cấp",
+                Slug = "wifi-7-cao-cap",
+                DisplayOrder = 3,
+                Active = true,
+                CreatedAt = DateTime.UtcNow
+            },
+            new Category
+            {
+                Id = 4,
+                Name = "Doanh Nghiệp",
+                Slug = "doanh-nghiep",
+                DisplayOrder = 4,
+                Active = true,
+                CreatedAt = DateTime.UtcNow
+            }
+        );
+    }
+
+    private static void SeedPackages(ModelBuilder modelBuilder)
+    {
         modelBuilder.Entity<Package>().HasData(
             new Package
             {
@@ -74,6 +133,7 @@ public class AppDbContext : DbContext
                 PriceMonthly = 180000,
                 PromotionText = "Tặng Modem WiFi 6 + Giảm 50k online + Tặng 1 tháng nếu trả trước 12 tháng",
                 DeviceBonus = "Modem WiFi 6",
+                CategoryId = 1, // Internet Gia Đình
                 Active = true
             },
             new Package
@@ -85,6 +145,7 @@ public class AppDbContext : DbContext
                 PriceMonthly = 190000,
                 PromotionText = "Tặng Modem WiFi 6 + FPT Play Box (combo) + Giảm 50k",
                 DeviceBonus = "Modem WiFi 6 + FPT Play Box",
+                CategoryId = 2, // Combo
                 Active = true
             },
             new Package
@@ -96,6 +157,7 @@ public class AppDbContext : DbContext
                 PriceMonthly = 305000,
                 PromotionText = "Symmetric 1Gbps + WiFi 6 + Mesh/AP tùy F1/F2/F3 + Tặng tháng trả trước",
                 DeviceBonus = "Modem WiFi 6 + Access Point/Mesh",
+                CategoryId = 1, // Internet Gia Đình
                 Active = true
             },
             new Package
@@ -107,6 +169,7 @@ public class AppDbContext : DbContext
                 PriceMonthly = 269000,
                 PromotionText = "Ngoại hạng Anh + FPT Play Box + Modem WiFi 6",
                 DeviceBonus = "Modem WiFi 6 + FPT Play Box",
+                CategoryId = 2, // Combo
                 Active = true
             },
             new Package
@@ -118,6 +181,7 @@ public class AppDbContext : DbContext
                 PriceMonthly = 1099000,
                 PromotionText = "XGS-PON + WiFi 7 + Mesh WiFi 7 + FPT Play VIP",
                 DeviceBonus = "Modem WiFi 7 + 1 Mesh WiFi 7",
+                CategoryId = 3, // WiFi 7
                 Active = true
             }
         );

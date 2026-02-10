@@ -22,6 +22,74 @@ namespace FPTTelecomBE.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("FPTTelecomBE.Models.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Active = true,
+                            CreatedAt = new DateTime(2026, 2, 10, 14, 1, 27, 123, DateTimeKind.Utc).AddTicks(6150),
+                            DisplayOrder = 1,
+                            Name = "Internet Gia Đình",
+                            Slug = "internet-gia-dinh"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Active = true,
+                            CreatedAt = new DateTime(2026, 2, 10, 14, 1, 27, 123, DateTimeKind.Utc).AddTicks(6153),
+                            DisplayOrder = 2,
+                            Name = "Combo Đa Dịch Vụ",
+                            Slug = "combo-da-dich-vu"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Active = true,
+                            CreatedAt = new DateTime(2026, 2, 10, 14, 1, 27, 123, DateTimeKind.Utc).AddTicks(6155),
+                            DisplayOrder = 3,
+                            Name = "WiFi 7 Cao Cấp",
+                            Slug = "wifi-7-cao-cap"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Active = true,
+                            CreatedAt = new DateTime(2026, 2, 10, 14, 1, 27, 123, DateTimeKind.Utc).AddTicks(6156),
+                            DisplayOrder = 4,
+                            Name = "Doanh Nghiệp",
+                            Slug = "doanh-nghiep"
+                        });
+                });
+
             modelBuilder.Entity("FPTTelecomBE.Models.Package", b =>
                 {
                     b.Property<int>("Id")
@@ -33,8 +101,14 @@ namespace FPTTelecomBE.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
 
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<string>("DeviceBonus")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -57,6 +131,8 @@ namespace FPTTelecomBE.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId");
+
                     b.ToTable("Packages");
 
                     b.HasData(
@@ -64,6 +140,7 @@ namespace FPTTelecomBE.Migrations
                         {
                             Id = 1,
                             Active = true,
+                            CategoryId = 1,
                             DeviceBonus = "Modem WiFi 6",
                             Name = "Internet Giga",
                             PriceMonthly = 180000m,
@@ -75,6 +152,7 @@ namespace FPTTelecomBE.Migrations
                         {
                             Id = 2,
                             Active = true,
+                            CategoryId = 2,
                             DeviceBonus = "Modem WiFi 6 + FPT Play Box",
                             Name = "Internet Sky",
                             PriceMonthly = 190000m,
@@ -86,6 +164,7 @@ namespace FPTTelecomBE.Migrations
                         {
                             Id = 3,
                             Active = true,
+                            CategoryId = 1,
                             DeviceBonus = "Modem WiFi 6 + Access Point/Mesh",
                             Name = "Internet Meta",
                             PriceMonthly = 305000m,
@@ -97,6 +176,7 @@ namespace FPTTelecomBE.Migrations
                         {
                             Id = 4,
                             Active = true,
+                            CategoryId = 2,
                             DeviceBonus = "Modem WiFi 6 + FPT Play Box",
                             Name = "Combo Thể Thao Sky",
                             PriceMonthly = 269000m,
@@ -108,6 +188,7 @@ namespace FPTTelecomBE.Migrations
                         {
                             Id = 5,
                             Active = true,
+                            CategoryId = 3,
                             DeviceBonus = "Modem WiFi 7 + 1 Mesh WiFi 7",
                             Name = "SpeedX2 Pro (WiFi 7)",
                             PriceMonthly = 1099000m,
@@ -244,11 +325,11 @@ namespace FPTTelecomBE.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2026, 1, 30, 14, 36, 40, 165, DateTimeKind.Utc).AddTicks(8535),
+                            CreatedAt = new DateTime(2026, 2, 10, 14, 1, 27, 13, DateTimeKind.Utc).AddTicks(9858),
                             Email = "admin@fptbinhdinh.com",
                             Name = "Admin FPT Bình Định",
-                            PasswordHash = "$2a$11$Zf.l2r7JwU1dPwKgrNV4I.A9j6jwe9sQmfeo.D58l6Lcb/40gKNeW",
-                            Phone = "0901234567",
+                            PasswordHash = "$2a$11$r/XqDSP7sVWtf9dLxfhzK.CVzLcsHVlm3IPrMOVgQrjWWVdy.9zTS",
+                            Phone = "0332766193",
                             Role = "Admin"
                         },
                         new
@@ -257,10 +338,21 @@ namespace FPTTelecomBE.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "staff@fptbinhdinh.com",
                             Name = "Staff Quy Nhơn",
-                            PasswordHash = "$2a$11$x65sbf/sxBgA7OSamNcuEuzA6TfrcgdrVDjYriBOciT5LSNZ5fM8K",
+                            PasswordHash = "$2a$11$Ukel9S36Yb4fnazDHsKGr.gaXjKomqTGou4bMdrX.cLnkJls/QVkm",
                             Phone = "0902345678",
                             Role = "Staff"
                         });
+                });
+
+            modelBuilder.Entity("FPTTelecomBE.Models.Package", b =>
+                {
+                    b.HasOne("FPTTelecomBE.Models.Category", "Category")
+                        .WithMany("Packages")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("FPTTelecomBE.Models.Registration", b =>
@@ -286,6 +378,11 @@ namespace FPTTelecomBE.Migrations
                     b.Navigation("Package");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("FPTTelecomBE.Models.Category", b =>
+                {
+                    b.Navigation("Packages");
                 });
 #pragma warning restore 612, 618
         }
