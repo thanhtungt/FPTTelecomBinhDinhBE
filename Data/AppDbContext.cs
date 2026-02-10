@@ -87,6 +87,7 @@ public class AppDbContext : DbContext
                 Id = 1,
                 Name = "Internet Gia Đình",
                 Slug = "internet-gia-dinh",
+                Description = "Các gói cước internet dành cho hộ gia đình với tốc độ và giá cả đa dạng.",
                 DisplayOrder = 1,
                 Active = true,
                 CreatedAt = DateTime.UtcNow
@@ -96,6 +97,7 @@ public class AppDbContext : DbContext
                 Id = 2,
                 Name = "Combo Đa Dịch Vụ",
                 Slug = "combo-da-dich-vu",
+                Description = "Các gói combo tích hợp internet với truyền hình, điện thoại và các dịch vụ khác.",
                 DisplayOrder = 2,
                 Active = true,
                 CreatedAt = DateTime.UtcNow
@@ -105,6 +107,7 @@ public class AppDbContext : DbContext
                 Id = 3,
                 Name = "WiFi 7 Cao Cấp",
                 Slug = "wifi-7-cao-cap",
+                Description = "Các gói cước sử dụng công nghệ WiFi 7 mới nhất với tốc độ siêu nhanh và ổn định.",
                 DisplayOrder = 3,
                 Active = true,
                 CreatedAt = DateTime.UtcNow
@@ -114,6 +117,7 @@ public class AppDbContext : DbContext
                 Id = 4,
                 Name = "Doanh Nghiệp",
                 Slug = "doanh-nghiep",
+                Description = "Các gói cước internet và dịch vụ dành riêng cho doanh nghiệp với yêu cầu cao về tốc độ và độ ổn định.",
                 DisplayOrder = 4,
                 Active = true,
                 CreatedAt = DateTime.UtcNow

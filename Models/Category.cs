@@ -8,6 +8,7 @@
 
         public string Slug { get; set; } = string.Empty; // "internet-gia-dinh", "combo-da-dich-vu
 
+        public string? Description { get; set; }
         public int DisplayOrder { get; set; } = 0; // Thứ tự hiển thị
 
         public bool Active { get; set; } = true;

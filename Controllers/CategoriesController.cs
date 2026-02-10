@@ -37,6 +37,7 @@ public class CategoriesController : ControllerBase
                 Id = c.Id,
                 Name = c.Name,
                 Slug = c.Slug,
+                Description = c.Description,
                 DisplayOrder = c.DisplayOrder,
                 Active = c.Active,
                 PackageCount = c.Packages.Count(p => p.Active)
@@ -59,6 +60,7 @@ public class CategoriesController : ControllerBase
                 Id = c.Id,
                 Name = c.Name,
                 Slug = c.Slug,
+                Description = c.Description,
                 DisplayOrder = c.DisplayOrder,
                 Active = c.Active,
                 PackageCount = c.Packages.Count
@@ -85,6 +87,7 @@ public class CategoriesController : ControllerBase
             Id = category.Id,
             Name = category.Name,
             Slug = category.Slug,
+            Description = category.Description,
             DisplayOrder = category.DisplayOrder,
             Active = category.Active,
             PackageCount = category.Packages.Count
@@ -109,6 +112,7 @@ public class CategoriesController : ControllerBase
             Id = category.Id,
             Name = category.Name,
             Slug = category.Slug,
+            Description = category.Description,
             DisplayOrder = category.DisplayOrder,
             Active = category.Active,
             PackageCount = category.Packages.Count
@@ -136,6 +140,7 @@ public class CategoriesController : ControllerBase
         {
             Name = dto.Name,
             Slug = slug,
+            Description = dto.Description,
             DisplayOrder = dto.DisplayOrder,
             Active = dto.Active,
             CreatedAt = DateTime.UtcNow
@@ -149,6 +154,7 @@ public class CategoriesController : ControllerBase
             Id = category.Id,
             Name = category.Name,
             Slug = category.Slug,
+            Description = category.Description,
             DisplayOrder = category.DisplayOrder,
             Active = category.Active,
             PackageCount = 0
@@ -179,6 +185,7 @@ public class CategoriesController : ControllerBase
 
         category.Name = dto.Name;
         category.Slug = slug;
+        category.Description = dto.Description;
         category.DisplayOrder = dto.DisplayOrder;
         category.Active = dto.Active;
 
@@ -191,6 +198,7 @@ public class CategoriesController : ControllerBase
             Id = category.Id,
             Name = category.Name,
             Slug = category.Slug,
+            Description = category.Description,
             DisplayOrder = category.DisplayOrder,
             Active = category.Active,
             PackageCount = packageCount
@@ -247,6 +255,7 @@ public class CategoriesController : ControllerBase
             Id = category.Id,
             Name = category.Name,
             Slug = category.Slug,
+            Description = category.Description,
             DisplayOrder = category.DisplayOrder,
             Active = category.Active,
             PackageCount = packageCount

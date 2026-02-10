@@ -819,6 +819,12 @@
             "minLength": 0,
             "type": "string"
           },
+          "description": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
           "displayOrder": {
             "maximum": 1000,
             "minimum": 0,
@@ -1020,6 +1026,12 @@
             "maxLength": 100,
             "minLength": 0,
             "type": "string"
+          },
+          "description": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
           },
           "displayOrder": {
             "maximum": 1000,
