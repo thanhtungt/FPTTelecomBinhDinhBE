@@ -13,6 +13,8 @@ public class AppDbContext : DbContext
     public DbSet<Package> Packages { get; set; }
     public DbSet<Registration> Registrations { get; set; }
     public DbSet<Post> Posts { get; set; }
+    public DbSet<JobPosting> JobPostings { get; set; }
+    public DbSet<JobApplication> JobApplications { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -46,6 +48,35 @@ public class AppDbContext : DbContext
             .WithMany()
             .HasForeignKey(r => r.AssignedStaffId)
             .OnDelete(DeleteBehavior.SetNull);
+
+        // ← THÊM PHẦN NÀY: JobPosting relationships
+        modelBuilder.Entity<JobPosting>()
+            .HasOne(j => j.CreatedBy)
+            .WithMany()
+            .HasForeignKey(j => j.CreatedByUserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<JobPosting>()
+            .Property(j => j.SalaryMin)
+            .HasPrecision(18, 2);
+
+        modelBuilder.Entity<JobPosting>()
+            .Property(j => j.SalaryMax)
+            .HasPrecision(18, 2);
+
+        // JobApplication relationships
+        modelBuilder.Entity<JobApplication>()
+            .HasOne(a => a.JobPosting)
+            .WithMany(j => j.Applications)
+            .HasForeignKey(a => a.JobPostingId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<JobApplication>()
+            .HasOne(a => a.ReviewedBy)
+            .WithMany()
+            .HasForeignKey(a => a.ReviewedByUserId)
+            .OnDelete(DeleteBehavior.SetNull);
+        // ← KẾT THÚC PHẦN THÊM
 
         // Seed data
         SeedUsers(modelBuilder);

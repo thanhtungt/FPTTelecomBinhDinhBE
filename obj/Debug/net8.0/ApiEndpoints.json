@@ -153,6 +153,223 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "FPTTelecomBE.Controllers.JobApplicationsController",
+    "Method": "CreateJobApplication",
+    "RelativePath": "api/JobApplications",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "FPTTelecomBE.DTOs.JobApplication.CreateJobApplicationDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FPTTelecomBE.Controllers.JobApplicationsController",
+    "Method": "GetAllJobApplications",
+    "RelativePath": "api/JobApplications",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "status",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FPTTelecomBE.Controllers.JobApplicationsController",
+    "Method": "GetJobApplicationById",
+    "RelativePath": "api/JobApplications/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FPTTelecomBE.Controllers.JobApplicationsController",
+    "Method": "DeleteJobApplication",
+    "RelativePath": "api/JobApplications/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FPTTelecomBE.Controllers.JobApplicationsController",
+    "Method": "UpdateJobApplicationStatus",
+    "RelativePath": "api/JobApplications/{id}/status",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "FPTTelecomBE.DTOs.JobApplication.UpdateJobApplicationStatusDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FPTTelecomBE.Controllers.JobApplicationsController",
+    "Method": "GetJobApplicationsByJobPosting",
+    "RelativePath": "api/JobApplications/by-job/{jobPostingId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "jobPostingId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FPTTelecomBE.Controllers.JobPostingsController",
+    "Method": "CreateJobPosting",
+    "RelativePath": "api/JobPostings",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "FPTTelecomBE.DTOs.JobPosting.CreateJobPostingDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FPTTelecomBE.Controllers.JobPostingsController",
+    "Method": "GetAllJobPostings",
+    "RelativePath": "api/JobPostings",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "status",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FPTTelecomBE.Controllers.JobPostingsController",
+    "Method": "GetJobPostingById",
+    "RelativePath": "api/JobPostings/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FPTTelecomBE.Controllers.JobPostingsController",
+    "Method": "UpdateJobPosting",
+    "RelativePath": "api/JobPostings/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "FPTTelecomBE.DTOs.JobPosting.UpdateJobPostingDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FPTTelecomBE.Controllers.JobPostingsController",
+    "Method": "DeleteJobPosting",
+    "RelativePath": "api/JobPostings/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FPTTelecomBE.Controllers.JobPostingsController",
+    "Method": "UpdateJobPostingStatus",
+    "RelativePath": "api/JobPostings/{id}/status",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "FPTTelecomBE.DTOs.JobPosting.UpdateJobPostingStatusDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FPTTelecomBE.Controllers.JobPostingsController",
+    "Method": "GetActiveJobPostings",
+    "RelativePath": "api/JobPostings/active",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "FPTTelecomBE.Controllers.PackagesController",
     "Method": "GetPackages",
     "RelativePath": "api/Packages",

@@ -28,6 +28,10 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 // Services
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IRegistrationService, RegistrationService>();
+// Thêm dòng này vào phần services
+builder.Services.AddScoped<IJobPostingService, JobPostingService>();
+// service cho JobApplication
+builder.Services.AddScoped<IJobApplicationService, JobApplicationService>();
 
 //Response Comression
 builder.Services.AddResponseCompression(options =>
