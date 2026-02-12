@@ -11,12 +11,14 @@ public class RegistrationService : IRegistrationService
     private readonly AppDbContext _context;
     private readonly IMapper _mapper;
     private readonly ILogger<RegistrationService> _logger;
+    private readonly IEmailService _emailService;
 
-    public RegistrationService(AppDbContext context, IMapper mapper, ILogger<RegistrationService> logger)
+    public RegistrationService(AppDbContext context, IMapper mapper, ILogger<RegistrationService> logger, IEmailService emailService)
     {
         _context = context;
         _mapper = mapper;
         _logger = logger;
+        _emailService = emailService;
     }
 
     public async Task<RegistrationResponseDto> CreateRegistration(CreateRegistrationDto dto)
@@ -40,7 +42,29 @@ public class RegistrationService : IRegistrationService
         // Auto-assign staff (optional - round-robin hoặc random)
         await AutoAssignStaff(registration.Id);
 
-        return await GetRegistrationById(registration.Id) ?? throw new Exception("Failed to create registration");
+        var result = await GetRegistrationById(registration.Id)
+            ?? throw new Exception("Failed to create registration");
+
+        // ← GỬI EMAIL CHO ADMIN 1
+        _ = Task.Run(async () =>
+        {
+            try
+            {
+                await _emailService.SendRegistrationNotificationToAdminAsync(
+                    registrationId: result.Id.ToString(),
+                    customerName: result.FullName,
+                    phone: result.Phone,
+                    address: result.Address,
+                    packageName: result.PackageName
+                );
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Lỗi gửi email thông báo đăng ký");
+            }
+        });
+
+        return result;
     }
 
     public async Task<RegistrationResponseDto?> GetRegistrationById(int id)

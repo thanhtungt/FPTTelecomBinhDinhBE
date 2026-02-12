@@ -32,6 +32,7 @@ builder.Services.AddScoped<IRegistrationService, RegistrationService>();
 builder.Services.AddScoped<IJobPostingService, JobPostingService>();
 // service cho JobApplication
 builder.Services.AddScoped<IJobApplicationService, JobApplicationService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 //Response Comression
 builder.Services.AddResponseCompression(options =>

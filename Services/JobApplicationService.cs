@@ -9,11 +9,13 @@ public class JobApplicationService : IJobApplicationService
 {
     private readonly AppDbContext _context;
     private readonly ILogger<JobApplicationService> _logger;
+    private readonly IEmailService _emailService;
 
-    public JobApplicationService(AppDbContext context, ILogger<JobApplicationService> logger)
+    public JobApplicationService(AppDbContext context, ILogger<JobApplicationService> logger, IEmailService emailService)
     {
         _context = context;
         _logger = logger;
+        _emailService = emailService;
     }
 
     public async Task<JobApplicationResponseDto> CreateJobApplication(CreateJobApplicationDto dto)
@@ -65,10 +67,31 @@ public class JobApplicationService : IJobApplicationService
         _logger.LogInformation("Hồ sơ ứng tuyển được tạo: {AppId} - {FullName} cho tin {JobId}",
             jobApplication.Id, jobApplication.FullName, dto.JobPostingId);
 
-        return await GetJobApplicationById(jobApplication.Id)
+        var result = await GetJobApplicationById(jobApplication.Id)
             ?? throw new InvalidOperationException("Không thể lấy thông tin hồ sơ vừa tạo");
-    }
 
+        // ← GỬI EMAIL CHO ADMIN 2
+        _ = Task.Run(async () =>
+        {
+            try
+            {
+                await _emailService.SendJobApplicationNotificationToAdminAsync(
+                    applicationId: result.Id.ToString(),
+                    candidateName: result.FullName,
+                    email: result.Email,
+                    phone: result.Phone,
+                    position: result.JobPostingPosition ?? "",
+                    jobTitle: result.JobPostingTitle ?? ""
+                );
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Lỗi gửi email thông báo ứng tuyển");
+            }
+        });
+
+        return result;
+    }
     public async Task<JobApplicationResponseDto?> GetJobApplicationById(int id)
     {
         var application = await _context.JobApplications
