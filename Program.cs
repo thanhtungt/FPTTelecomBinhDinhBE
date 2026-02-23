@@ -406,7 +406,7 @@ builder.Services.AddCors(options =>
             "http://localhost:3000",
             "http://localhost:5173",
             "https://fpttelecombinhdinh.vercel.app",
-            "https://fpttelecombinhdinhbe.onrender.com",)
+            "https://fpttelecombinhdinhbe.onrender.com")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
