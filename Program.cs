@@ -12,6 +12,11 @@ using System.IO.Compression;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.ListenAnyIP(int.Parse(port));
+});
 
 // Logging configuration
 builder.Logging.ClearProviders();
@@ -125,6 +130,7 @@ builder.Services.AddCors(options =>
             "http://localhost:3000",
             "http://localhost:5173",
             "https://fpt-telecom-fe.vercel.app",
+            "https://your-app-name.onrender.com",
             "https://*.vercel.app")
               .AllowAnyHeader()
               .AllowAnyMethod()
@@ -176,6 +182,39 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
+if (app.Environment.IsProduction())
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var services = scope.ServiceProvider;
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        
+        try
+        {
+            logger.LogInformation("🔄 Starting database migration...");
+            
+            // Get DbContext instance
+            var context = services.GetRequiredService<AppDbContext>();
+            
+            // Apply all pending migrations
+            // Tương đương với: dotnet ef database update
+            context.Database.Migrate();
+            
+            logger.LogInformation("✅ Database migration completed successfully.");
+            
+            // Optional: Seed initial data
+            // await SeedData.Initialize(services);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "❌ An error occurred while migrating the database.");
+            
+            // IMPORTANT: Throw exception để fail deployment
+            // Nếu migration lỗi mà app vẫn start → data inconsistency
+            throw;
+        }
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

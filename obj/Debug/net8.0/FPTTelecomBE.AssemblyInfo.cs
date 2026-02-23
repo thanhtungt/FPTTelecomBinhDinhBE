@@ -10,10 +10,11 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("50f31a99-3e8f-4f01-a5e8-e52c360deb9f")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("FPTTelecomBE")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+737097ebb533dcf3043c2f3a95f08b93d023d6f4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+acbf847902c602c8df832ce3da78436ee543eba3")]
 [assembly: System.Reflection.AssemblyProductAttribute("FPTTelecomBE")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FPTTelecomBE")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
