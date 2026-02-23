@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FPTTelecomBE")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+41e249a14851a8379402f567cda8ab16be341842")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1038ed254328660b02e38bc7e43fbf178fc02f70")]
 [assembly: System.Reflection.AssemblyProductAttribute("FPTTelecomBE")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FPTTelecomBE")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

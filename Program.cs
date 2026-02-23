@@ -28,6 +28,7 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 // Services
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRegistrationService, RegistrationService>();
 // Thêm dòng này vào phần services
 builder.Services.AddScoped<IJobPostingService, JobPostingService>();
