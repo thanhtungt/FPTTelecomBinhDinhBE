@@ -21,7 +21,7 @@ builder.Logging.AddEventSourceLogger();
 
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));
@@ -104,6 +104,19 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 
 // CORS
+// builder.Services.AddCors(options =>
+// {
+//     options.AddPolicy("AllowFrontend", policy =>
+//     {
+//         policy.WithOrigins(
+//             "http://localhost:3000",
+//             "http://localhost:5173",
+//             "http://localhost:5174")
+//               .AllowAnyHeader()
+//               .AllowAnyMethod()
+//               .AllowCredentials();
+//     });
+// });
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
@@ -111,7 +124,8 @@ builder.Services.AddCors(options =>
         policy.WithOrigins(
             "http://localhost:3000",
             "http://localhost:5173",
-            "http://localhost:5174")
+            "https://fpt-telecom-fe.vercel.app",
+            "https://*.vercel.app")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
@@ -180,7 +194,7 @@ else
     app.ConfigureExceptionHandler(logger);
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseResponseCompression();
 
@@ -190,6 +204,13 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+// Health check endpoint
+app.MapGet("/health", () => Results.Ok(new
+{
+    status = "healthy",
+    timestamp = DateTime.UtcNow,
+    version = "1.0.0"
+}));
 app.MapHub<ChatHub>("/hubs/chat");
 
 // HealthIsDevelopment check endpoint
