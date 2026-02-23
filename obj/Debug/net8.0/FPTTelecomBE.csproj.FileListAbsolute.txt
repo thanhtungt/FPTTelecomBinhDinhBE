@@ -141,3 +141,11 @@ F:\FPTTelecomBD\BE\FPTTelecomBE\FPTTelecomBE\obj\Debug\net8.0\FPTTelecomBE.pdb
 F:\FPTTelecomBD\BE\FPTTelecomBE\FPTTelecomBE\obj\Debug\net8.0\FPTTelecomBE.genruntimeconfig.cache
 F:\FPTTelecomBD\BE\FPTTelecomBE\FPTTelecomBE\obj\Debug\net8.0\ref\FPTTelecomBE.dll
 F:\FPTTelecomBD\BE\FPTTelecomBE\FPTTelecomBE\obj\Debug\net8.0\FPTTelecomBE.sourcelink.json
+F:\FPTTelecomBD\BE\FPTTelecomBE\FPTTelecomBE\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+F:\FPTTelecomBD\BE\FPTTelecomBE\FPTTelecomBE\bin\Debug\net8.0\Microsoft.Extensions.Diagnostics.Abstractions.dll
+F:\FPTTelecomBD\BE\FPTTelecomBE\FPTTelecomBE\bin\Debug\net8.0\Microsoft.Extensions.Hosting.Abstractions.dll
+F:\FPTTelecomBD\BE\FPTTelecomBE\FPTTelecomBE\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
+F:\FPTTelecomBD\BE\FPTTelecomBE\FPTTelecomBE\bin\Debug\net8.0\Microsoft.Extensions.ObjectPool.dll
+F:\FPTTelecomBD\BE\FPTTelecomBE\FPTTelecomBE\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
+F:\FPTTelecomBD\BE\FPTTelecomBE\FPTTelecomBE\bin\Debug\net8.0\Newtonsoft.Json.dll
+F:\FPTTelecomBD\BE\FPTTelecomBE\FPTTelecomBE\bin\Debug\net8.0\System.Net.WebSockets.WebSocketProtocol.dll

@@ -15,6 +15,9 @@ public class AppDbContext : DbContext
     public DbSet<Post> Posts { get; set; }
     public DbSet<JobPosting> JobPostings { get; set; }
     public DbSet<JobApplication> JobApplications { get; set; }
+    public DbSet<ChatSession> ChatSessions { get; set; }
+    public DbSet<ChatMessage> ChatMessages { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -28,7 +31,7 @@ public class AppDbContext : DbContext
             .HasOne(p => p.Category)
             .WithMany(c => c.Packages)
             .HasForeignKey(p => p.CategoryId)
-            .OnDelete(DeleteBehavior.Restrict); // Không cho xóa category nếu còn packages
+            .OnDelete(DeleteBehavior.Restrict);
 
         // Registration relationships
         modelBuilder.Entity<Registration>()
@@ -49,7 +52,7 @@ public class AppDbContext : DbContext
             .HasForeignKey(r => r.AssignedStaffId)
             .OnDelete(DeleteBehavior.SetNull);
 
-        // ← THÊM PHẦN NÀY: JobPosting relationships
+        // JobPosting relationships
         modelBuilder.Entity<JobPosting>()
             .HasOne(j => j.CreatedBy)
             .WithMany()
@@ -76,7 +79,37 @@ public class AppDbContext : DbContext
             .WithMany()
             .HasForeignKey(a => a.ReviewedByUserId)
             .OnDelete(DeleteBehavior.SetNull);
-        // ← KẾT THÚC PHẦN THÊM
+
+        // Chat relationships - FIX: Thay đổi để tránh multiple cascade paths
+        modelBuilder.Entity<ChatSession>()
+            .HasOne(cs => cs.User)
+            .WithMany()
+            .HasForeignKey(cs => cs.UserId)
+            .OnDelete(DeleteBehavior.NoAction) // ← Thay đổi từ SetNull sang NoAction
+            .IsRequired(false);
+
+        modelBuilder.Entity<ChatSession>()
+            .HasOne(cs => cs.AssignedStaff)
+            .WithMany()
+            .HasForeignKey(cs => cs.AssignedStaffId)
+            .OnDelete(DeleteBehavior.NoAction) // ← Thay đổi từ SetNull sang NoAction
+            .IsRequired(false);
+
+        modelBuilder.Entity<ChatSession>()
+            .HasIndex(cs => cs.SessionId)
+            .IsUnique();
+
+        modelBuilder.Entity<ChatMessage>()
+            .HasOne(cm => cm.User)
+            .WithMany()
+            .HasForeignKey(cm => cm.UserId)
+            .OnDelete(DeleteBehavior.NoAction) // ← Thay đổi từ SetNull sang NoAction
+            .IsRequired(false);
+
+        modelBuilder.Entity<ChatMessage>()
+            .HasIndex(cm => cm.SessionId);
+
+        base.OnModelCreating(modelBuilder);
 
         // Seed data
         SeedUsers(modelBuilder);
@@ -168,7 +201,7 @@ public class AppDbContext : DbContext
                 PriceMonthly = 180000,
                 PromotionText = "Tặng Modem WiFi 6 + Giảm 50k online + Tặng 1 tháng nếu trả trước 12 tháng",
                 DeviceBonus = "Modem WiFi 6",
-                CategoryId = 1, // Internet Gia Đình
+                CategoryId = 1,
                 Active = true
             },
             new Package
@@ -180,7 +213,7 @@ public class AppDbContext : DbContext
                 PriceMonthly = 190000,
                 PromotionText = "Tặng Modem WiFi 6 + FPT Play Box (combo) + Giảm 50k",
                 DeviceBonus = "Modem WiFi 6 + FPT Play Box",
-                CategoryId = 2, // Combo
+                CategoryId = 2,
                 Active = true
             },
             new Package
@@ -192,7 +225,7 @@ public class AppDbContext : DbContext
                 PriceMonthly = 305000,
                 PromotionText = "Symmetric 1Gbps + WiFi 6 + Mesh/AP tùy F1/F2/F3 + Tặng tháng trả trước",
                 DeviceBonus = "Modem WiFi 6 + Access Point/Mesh",
-                CategoryId = 1, // Internet Gia Đình
+                CategoryId = 1,
                 Active = true
             },
             new Package
@@ -204,7 +237,7 @@ public class AppDbContext : DbContext
                 PriceMonthly = 269000,
                 PromotionText = "Ngoại hạng Anh + FPT Play Box + Modem WiFi 6",
                 DeviceBonus = "Modem WiFi 6 + FPT Play Box",
-                CategoryId = 2, // Combo
+                CategoryId = 2,
                 Active = true
             },
             new Package
@@ -216,7 +249,7 @@ public class AppDbContext : DbContext
                 PriceMonthly = 1099000,
                 PromotionText = "XGS-PON + WiFi 7 + Mesh WiFi 7 + FPT Play VIP",
                 DeviceBonus = "Modem WiFi 7 + 1 Mesh WiFi 7",
-                CategoryId = 3, // WiFi 7
+                CategoryId = 3,
                 Active = true
             }
         );

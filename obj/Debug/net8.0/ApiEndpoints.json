@@ -153,6 +153,112 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "FPTTelecomBE.Controllers.ChatController",
+    "Method": "GetMySessions",
+    "RelativePath": "api/Chat/my-sessions",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FPTTelecomBE.Controllers.ChatController",
+    "Method": "GetSession",
+    "RelativePath": "api/Chat/session/{sessionId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "sessionId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FPTTelecomBE.Controllers.ChatController",
+    "Method": "CloseSession",
+    "RelativePath": "api/Chat/session/{sessionId}/close",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "sessionId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FPTTelecomBE.Controllers.ChatController",
+    "Method": "CloseSessionByUser",
+    "RelativePath": "api/Chat/session/{sessionId}/close-by-user",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "sessionId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FPTTelecomBE.Controllers.ChatController",
+    "Method": "GetMessages",
+    "RelativePath": "api/Chat/session/{sessionId}/messages",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "sessionId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FPTTelecomBE.Controllers.ChatController",
+    "Method": "GetAllSessions",
+    "RelativePath": "api/Chat/sessions",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "status",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FPTTelecomBE.Controllers.ChatController",
+    "Method": "StartChat",
+    "RelativePath": "api/Chat/start",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "FPTTelecomBE.DTOs.Chat.StartChatDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "FPTTelecomBE.Controllers.JobApplicationsController",
     "Method": "CreateJobApplication",
     "RelativePath": "api/JobApplications",

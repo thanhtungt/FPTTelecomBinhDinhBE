@@ -4,6 +4,7 @@ using FPTTelecomBE.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FPTTelecomBE.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260212161756_AddChatBot")]
+    partial class AddChatBot
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,32 @@ namespace FPTTelecomBE.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("FPTTelecomBE.Models.AgentStatus", b =>
+                {
+                    b.Property<string>("AgentId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("ActiveConversations")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AgentName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("LastActiveAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("AgentId");
+
+                    b.ToTable("AgentStatuses");
+                });
 
             modelBuilder.Entity("FPTTelecomBE.Models.Category", b =>
                 {
@@ -59,7 +88,7 @@ namespace FPTTelecomBE.Migrations
                         {
                             Id = 1,
                             Active = true,
-                            CreatedAt = new DateTime(2026, 2, 13, 14, 9, 19, 623, DateTimeKind.Utc).AddTicks(9824),
+                            CreatedAt = new DateTime(2026, 2, 12, 16, 17, 56, 456, DateTimeKind.Utc).AddTicks(5083),
                             Description = "Các gói cước internet dành cho hộ gia đình với tốc độ và giá cả đa dạng.",
                             DisplayOrder = 1,
                             Name = "Internet Gia Đình",
@@ -69,7 +98,7 @@ namespace FPTTelecomBE.Migrations
                         {
                             Id = 2,
                             Active = true,
-                            CreatedAt = new DateTime(2026, 2, 13, 14, 9, 19, 623, DateTimeKind.Utc).AddTicks(9828),
+                            CreatedAt = new DateTime(2026, 2, 12, 16, 17, 56, 456, DateTimeKind.Utc).AddTicks(5086),
                             Description = "Các gói combo tích hợp internet với truyền hình, điện thoại và các dịch vụ khác.",
                             DisplayOrder = 2,
                             Name = "Combo Đa Dịch Vụ",
@@ -79,7 +108,7 @@ namespace FPTTelecomBE.Migrations
                         {
                             Id = 3,
                             Active = true,
-                            CreatedAt = new DateTime(2026, 2, 13, 14, 9, 19, 623, DateTimeKind.Utc).AddTicks(9831),
+                            CreatedAt = new DateTime(2026, 2, 12, 16, 17, 56, 456, DateTimeKind.Utc).AddTicks(5087),
                             Description = "Các gói cước sử dụng công nghệ WiFi 7 mới nhất với tốc độ siêu nhanh và ổn định.",
                             DisplayOrder = 3,
                             Name = "WiFi 7 Cao Cấp",
@@ -89,7 +118,7 @@ namespace FPTTelecomBE.Migrations
                         {
                             Id = 4,
                             Active = true,
-                            CreatedAt = new DateTime(2026, 2, 13, 14, 9, 19, 623, DateTimeKind.Utc).AddTicks(9833),
+                            CreatedAt = new DateTime(2026, 2, 12, 16, 17, 56, 456, DateTimeKind.Utc).AddTicks(5089),
                             Description = "Các gói cước internet và dịch vụ dành riêng cho doanh nghiệp với yêu cầu cao về tốc độ và độ ổn định.",
                             DisplayOrder = 4,
                             Name = "Doanh Nghiệp",
@@ -105,59 +134,47 @@ namespace FPTTelecomBE.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ChatSessionId")
-                        .HasColumnType("int");
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("ConversationId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsRead")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SenderEmail")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("SenderName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("SenderType")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
-                    b.Property<string>("SessionId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("SentAt")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ChatSessionId");
-
-                    b.HasIndex("SessionId");
-
-                    b.HasIndex("UserId");
+                    b.HasIndex("ConversationId");
 
                     b.ToTable("ChatMessages");
                 });
 
-            modelBuilder.Entity("FPTTelecomBE.Models.ChatSession", b =>
+            modelBuilder.Entity("FPTTelecomBE.Models.Conversation", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("AssignedAgentId")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("AssignedStaffId")
-                        .HasColumnType("int");
+                    b.Property<string>("AssignedAgentName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ClosedAt")
                         .HasColumnType("datetime2");
@@ -165,39 +182,27 @@ namespace FPTTelecomBE.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("LastMessageAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("SessionId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("UserEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("UserPhone")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AssignedStaffId");
-
-                    b.HasIndex("SessionId")
-                        .IsUnique();
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("ChatSessions");
+                    b.ToTable("Conversations");
                 });
 
             modelBuilder.Entity("FPTTelecomBE.Models.JobApplication", b =>
@@ -585,10 +590,10 @@ namespace FPTTelecomBE.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2026, 2, 13, 14, 9, 19, 510, DateTimeKind.Utc).AddTicks(2594),
+                            CreatedAt = new DateTime(2026, 2, 12, 16, 17, 56, 344, DateTimeKind.Utc).AddTicks(2829),
                             Email = "admin@fptbinhdinh.com",
                             Name = "Admin FPT Bình Định",
-                            PasswordHash = "$2a$11$i8xsP.OiUdZNdpmY1YLV9ODQbxH2TSgsT2F40eYzlIz.Ihag2wbZe",
+                            PasswordHash = "$2a$11$YvSYcm2TK4a4pgkIDsR6eOaXvAoJ3nvXjg5Q8fMWRB7u2IiRZx2Uq",
                             Phone = "0332766193",
                             Role = "Admin"
                         },
@@ -598,7 +603,7 @@ namespace FPTTelecomBE.Migrations
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "staff@fptbinhdinh.com",
                             Name = "Staff Quy Nhơn",
-                            PasswordHash = "$2a$11$J30..WTBBMUBVNzaH9TLOOzLKJXB80e8tBH1m7pkkKdBbwj78wzDq",
+                            PasswordHash = "$2a$11$EmRDhxTwi4vOqmsqo.HI3uw8UOIrFLKvVjB0lcBI.2ZnKgVSjkKiC",
                             Phone = "0902345678",
                             Role = "Staff"
                         });
@@ -606,33 +611,11 @@ namespace FPTTelecomBE.Migrations
 
             modelBuilder.Entity("FPTTelecomBE.Models.ChatMessage", b =>
                 {
-                    b.HasOne("FPTTelecomBE.Models.ChatSession", null)
+                    b.HasOne("FPTTelecomBE.Models.Conversation", null)
                         .WithMany("Messages")
-                        .HasForeignKey("ChatSessionId");
-
-                    b.HasOne("FPTWifiBE.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("FPTTelecomBE.Models.ChatSession", b =>
-                {
-                    b.HasOne("FPTWifiBE.Models.User", "AssignedStaff")
-                        .WithMany()
-                        .HasForeignKey("AssignedStaffId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("FPTWifiBE.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("AssignedStaff");
-
-                    b.Navigation("User");
+                        .HasForeignKey("ConversationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("FPTTelecomBE.Models.JobApplication", b =>
@@ -705,7 +688,7 @@ namespace FPTTelecomBE.Migrations
                     b.Navigation("Packages");
                 });
 
-            modelBuilder.Entity("FPTTelecomBE.Models.ChatSession", b =>
+            modelBuilder.Entity("FPTTelecomBE.Models.Conversation", b =>
                 {
                     b.Navigation("Messages");
                 });

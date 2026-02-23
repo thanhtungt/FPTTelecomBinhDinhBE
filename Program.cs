@@ -1,4 +1,5 @@
 ﻿using FPTTelecomBE.Data;
+using FPTTelecomBE.Hubs;
 using FPTTelecomBE.Mappings;
 using FPTTelecomBE.Middleware;
 using FPTTelecomBE.Services;
@@ -33,6 +34,11 @@ builder.Services.AddScoped<IJobPostingService, JobPostingService>();
 // service cho JobApplication
 builder.Services.AddScoped<IJobApplicationService, JobApplicationService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IChatService, ChatService>();
+builder.Services.AddScoped<IChatbotService, ChatbotService>();
+
+// SignalR
+builder.Services.AddSignalR();
 
 //Response Comression
 builder.Services.AddResponseCompression(options =>
@@ -75,6 +81,23 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(key),
         ClockSkew = TimeSpan.Zero // Remove default 5 minute tolerance
     };
+
+    // SignalR Authentication
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query["access_token"];
+            var path = context.HttpContext.Request.Path;
+
+            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs/chat"))
+            {
+                context.Token = accessToken;
+            }
+            return Task.CompletedTask;
+        }
+    };
+
 });
 
 builder.Services.AddAuthorization();
@@ -84,7 +107,10 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:3000", "http://localhost:5173", "http://localhost:5174") // React/Vite dev servers
+        policy.WithOrigins(
+            "http://localhost:3000",
+            "http://localhost:5173",
+            "http://localhost:5174")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
@@ -163,6 +189,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<ChatHub>("/hubs/chat");
 
 // HealthIsDevelopment check endpoint
 app.MapGet("/health", () => Results.Ok(new
