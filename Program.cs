@@ -283,6 +283,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.IO.Compression;
+using System.Security.Claims;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -360,6 +361,11 @@ builder.Services.Configure<GzipCompressionProviderOptions>(options =>
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]!);
 
+// DEBUG: Log JWT settings
+Console.WriteLine($"🔍 JWT Issuer: {jwtSettings["Issuer"]}");
+Console.WriteLine($"🔍 JWT Audience: {jwtSettings["Audience"]}");
+Console.WriteLine($"🔍 JWT Key length: {key.Length} bytes");
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -376,11 +382,33 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = jwtSettings["Issuer"],
         ValidAudience = jwtSettings["Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(key),
-        ClockSkew = TimeSpan.Zero
+        ClockSkew = TimeSpan.FromMinutes(5) // Changed from Zero to 5 minutes
     };
 
     options.Events = new JwtBearerEvents
     {
+        OnAuthenticationFailed = context =>
+        {
+            Console.WriteLine($"❌ JWT Authentication Failed: {context.Exception.GetType().Name}");
+            Console.WriteLine($"❌ JWT Error: {context.Exception.Message}");
+            if (context.Exception.InnerException != null)
+            {
+                Console.WriteLine($"❌ Inner Exception: {context.Exception.InnerException.Message}");
+            }
+            return Task.CompletedTask;
+        },
+        OnTokenValidated = context =>
+        {
+            var userId = context.Principal?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var role = context.Principal?.FindFirst(ClaimTypes.Role)?.Value;
+            Console.WriteLine($"✅ JWT Token Validated - UserId: {userId}, Role: {role}");
+            return Task.CompletedTask;
+        },
+        OnChallenge = context =>
+        {
+            Console.WriteLine($"⚠️ JWT Challenge: {context.Error} - {context.ErrorDescription}");
+            return Task.CompletedTask;
+        },
         OnMessageReceived = context =>
         {
             var accessToken = context.Request.Query["access_token"];
@@ -404,7 +432,7 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins(
             "http://localhost:3000",
-            "http://localhost:5173",
+            "http://localhost:7086",
             "https://fpttelecombinhdinh.vercel.app",
             "https://fpttelecombinhdinhbe.onrender.com")
               .AllowAnyHeader()
@@ -547,6 +575,21 @@ app.MapGet("/health", () => Results.Ok(new
     version = "1.0.0",
     environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Unknown"
 }));
+
+// JWT Config diagnostic endpoint (for debugging only - remove in production)
+app.MapGet("/api/debug/jwt-config", (IConfiguration config) =>
+{
+    var jwtSection = config.GetSection("Jwt");
+    return Results.Ok(new
+    {
+        issuer = jwtSection["Issuer"],
+        audience = jwtSection["Audience"],
+        keyLength = jwtSection["Key"]?.Length ?? 0,
+        keyPreview = jwtSection["Key"]?.Substring(0, Math.Min(10, jwtSection["Key"]?.Length ?? 0)) + "...",
+        expiryDays = jwtSection["ExpiryInDays"],
+        timestamp = DateTime.UtcNow
+    });
+});
 
 // CHỈ CÓ MỘT app.Run() - XÓA CÁI DUPLICATE!
 app.Run();

@@ -1,6 +1,8 @@
 ﻿using FPTTelecomBE.DTOs.Auth;
 using FPTTelecomBE.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace FPTTelecomBE.Controllers;
 
@@ -33,5 +35,26 @@ public class AuthController : ControllerBase
             return Unauthorized(new { message = "Số điện thoại hoặc mật khẩu không đúng" });
 
         return Ok(result);
+    }
+
+    // Test endpoint to verify JWT authentication
+    [HttpGet("me")]
+    [Authorize]
+    public IActionResult GetCurrentUser()
+    {
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var userName = User.FindFirst(ClaimTypes.Name)?.Value;
+        var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
+        var userPhone = User.FindFirst(ClaimTypes.MobilePhone)?.Value;
+
+        return Ok(new
+        {
+            userId,
+            userName,
+            userRole,
+            userPhone,
+            isAuthenticated = User.Identity?.IsAuthenticated ?? false,
+            allClaims = User.Claims.Select(c => new { c.Type, c.Value }).ToList()
+        });
     }
 }

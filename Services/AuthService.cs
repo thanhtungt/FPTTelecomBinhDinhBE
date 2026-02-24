@@ -83,14 +83,24 @@ public class AuthService : IAuthService
             new Claim(ClaimTypes.Role, user.Role)
         };
 
+        var expiryTime = DateTime.UtcNow.AddDays(Convert.ToInt32(jwtSettings["ExpiryInDays"]));
+        
         var token = new JwtSecurityToken(
             issuer: jwtSettings["Issuer"],
             audience: jwtSettings["Audience"],
             claims: claims,
-            expires: DateTime.UtcNow.AddDays(Convert.ToInt32(jwtSettings["ExpiryInDays"])),
+            expires: expiryTime,
             signingCredentials: credentials
         );
 
-        return new JwtSecurityTokenHandler().WriteToken(token);
+        var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+        
+        // Debug logging
+        Console.WriteLine($"🔐 Generated JWT for User {user.Id} ({user.Role})");
+        Console.WriteLine($"🔐 Issuer: {jwtSettings["Issuer"]}, Audience: {jwtSettings["Audience"]}");
+        Console.WriteLine($"🔐 Expires: {expiryTime:yyyy-MM-dd HH:mm:ss} UTC");
+        Console.WriteLine($"🔐 Token preview: {tokenString.Substring(0, Math.Min(50, tokenString.Length))}...");
+        
+        return tokenString;
     }
 }
